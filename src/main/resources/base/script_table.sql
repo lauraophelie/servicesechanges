@@ -42,3 +42,13 @@ CREATE TABLE IF NOT EXISTS reponse_service(
     date_disponibilite DATE,
     id_utilisateur INTEGER REFERENCES utilisateur(id)
 );
+
+
+CREATE TABLE IF NOT EXISTS parametrage_demande_service(
+    id SERIAL PRIMARY KEY,
+    id_demande_service INTEGER REFERENCES demande_service(id) UNIQUE,
+    date_limite_reponse DATE,
+    marge_disponibilite INTEGER CHECK (marge_disponibilite > 0),
+    min_prix_propose DECIMAL(10, 2) DEFAULT 0 CHECK (min_prix_propose >= 0),
+    max_prix_propose DECIMAL(10, 2) CHECK (max_prix_propose >= 0)
+);
