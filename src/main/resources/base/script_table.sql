@@ -20,3 +20,25 @@ CREATE TABLE IF NOT EXISTS utilisateur(
     contact VARCHAR(10),
     mot_passe VARCHAR(20)
 );
+
+---------------------- 28/04/2025 -------------------------------
+
+
+CREATE TABLE IF NOT EXISTS demande_service(
+    id SERIAL PRIMARY KEY,
+    date_creation DATE DEFAULT now(),
+    description_service TEXT,
+    date_besoin_service DATE,
+    prix DECIMAL(10, 2) CHECK (prix > 0),
+    id_utilisateur INTEGER REFERENCES utilisateur(id)
+);
+
+ALTER TABLE demande_service ADD COLUMN intitule_service VARCHAR(250);
+
+CREATE TABLE IF NOT EXISTS reponse_service(
+    id SERIAL PRIMARY KEY,
+    date_reponse DATE DEFAULT now(),
+    prix_propose DECIMAL(10, 2) CHECK (prix_propose > 0),
+    date_disponibilite DATE,
+    id_utilisateur INTEGER REFERENCES utilisateur(id)
+);
