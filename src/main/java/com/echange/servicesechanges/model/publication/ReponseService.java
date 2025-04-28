@@ -63,4 +63,15 @@ public class ReponseService {
     public void setUtilisateur(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
     }
+
+    @ManyToOne
+    @JoinColumn(name = "id_demande_service")
+    private DemandeService demandeService;
+
+    public DemandeService getDemandeService() {
+        return demandeService;
+    }
+    public void setDemandeService(DemandeService demandeService) {
+        this.demandeService = demandeService;
+    }
 }

@@ -40,9 +40,9 @@ CREATE TABLE IF NOT EXISTS reponse_service(
     date_reponse DATE DEFAULT now(),
     prix_propose DECIMAL(10, 2) CHECK (prix_propose > 0),
     date_disponibilite DATE,
-    id_utilisateur INTEGER REFERENCES utilisateur(id)
+    id_utilisateur INTEGER REFERENCES utilisateur(id),
+    id_demande_service INTEGER REFERENCES demande_service(id)
 );
-
 
 CREATE TABLE IF NOT EXISTS parametrage_demande_service(
     id SERIAL PRIMARY KEY,
