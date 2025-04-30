@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS utilisateur(
 
 ---------------------- 28/04/2025 -------------------------------
 
-
 CREATE TABLE IF NOT EXISTS demande_service(
     id SERIAL PRIMARY KEY,
     date_creation DATE DEFAULT now(),
@@ -40,9 +39,9 @@ CREATE TABLE IF NOT EXISTS reponse_service(
     date_reponse DATE DEFAULT now(),
     prix_propose DECIMAL(10, 2) CHECK (prix_propose > 0),
     date_disponibilite DATE,
-    id_utilisateur INTEGER REFERENCES utilisateur(id)
+    id_utilisateur INTEGER REFERENCES utilisateur(id),
+    id_demande_service INTEGER REFERENCES demande_service(id)
 );
-
 
 CREATE TABLE IF NOT EXISTS parametrage_demande_service(
     id SERIAL PRIMARY KEY,
@@ -52,3 +51,30 @@ CREATE TABLE IF NOT EXISTS parametrage_demande_service(
     min_prix_propose DECIMAL(10, 2) DEFAULT 0 CHECK (min_prix_propose >= 0),
     max_prix_propose DECIMAL(10, 2) CHECK (max_prix_propose >= 0)
 );
+
+----------------------------- 29/04/2025 -------------------------------
+
+CREATE TABLE IF NOT EXISTS critere(
+    id SERIAL PRIMARY KEY,
+    designation_critere VARCHAR(250)
+);
+
+CREATE TABLE IF NOT EXISTS attribution_note_critere(
+    id SERIAL PRIMARY KEY,
+    id_demande_service INTEGER REFERENCES demande_service(id),
+    id_critere INTEGER REFERENCES critere(id),
+    min DECIMAL CHECK (min >= 0),
+    max DECIMAL CHECK (max > 0),
+    note DECIMAL CHECK (note >= 0),
+    bonus DECIMAL CHECK (bonus >= 0),
+    malus DECIMAL CHECK (malus >= 0)
+);
+
+CREATE TABLE IF NOT EXISTS attribution_poids_critere(
+    id SERIAL PRIMARY KEY,
+    id_demande_service INTEGER REFERENCES demande_service(id),
+    id_critere INTEGER REFERENCES critere(id),
+    poids DECIMAL CHECK (poids >= 0 AND poids <= 100)
+);
+
+ALTER TABLE attribution_poids_critere ADD CONSTRAINT check_unique_demande_crite UNIQUE(id_demande_service, id_critere);
