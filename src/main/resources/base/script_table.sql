@@ -63,16 +63,18 @@ CREATE TABLE IF NOT EXISTS attribution_note_critere(
     id SERIAL PRIMARY KEY,
     id_demande_service INTEGER REFERENCES demande_service(id),
     id_critere INTEGER REFERENCES critere(id),
-    min DECIMAL CHECK (min > 0),
+    min DECIMAL CHECK (min >= 0),
     max DECIMAL CHECK (max > 0),
-    note DECIMAL CHECK (note > 0),
-    bonus DECIMAL CHECK (bonus > 0),
-    malus DECIMAL CHECK (malus > 0)
+    note DECIMAL CHECK (note >= 0),
+    bonus DECIMAL CHECK (bonus >= 0),
+    malus DECIMAL CHECK (malus >= 0)
 );
 
 CREATE TABLE IF NOT EXISTS attribution_poids_critere(
     id SERIAL PRIMARY KEY,
     id_demande_service INTEGER REFERENCES demande_service(id),
     id_critere INTEGER REFERENCES critere(id),
-    poids DECIMAL CHECK (0 <= poids <= 100)
+    poids DECIMAL CHECK (poids >= 0 AND poids <= 100)
 );
+
+ALTER TABLE attribution_poids_critere ADD CONSTRAINT check_unique_demande_crite UNIQUE(id_demande_service, id_critere);
