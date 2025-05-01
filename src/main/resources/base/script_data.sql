@@ -32,3 +32,12 @@ INSERT INTO attribution_note_critere(id_demande_service, id_critere, min, max, b
 INSERT INTO attribution_poids_critere(id_demande_service, id_critere, poids) VALUES
     (1, 1, 40),
     (1, 2, 60);
+
+
+------------------------ 01/05/2025 ------------------------------
+
+INSERT INTO parametrage_penalite_jour(valeur_min, valeur_max, valeur_penalite) VALUES
+    (-3, -1, 2),
+    (-1, 1, 1),
+    (1, 3, 2),
+    (3, 6, 3);

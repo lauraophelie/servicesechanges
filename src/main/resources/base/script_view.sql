@@ -68,3 +68,51 @@ SELECT
     id_demande,
     ecart_jour
 FROM v_tri_data_reponse_candidat;
+
+CREATE OR REPLACE VIEW v_reponse_candidat AS
+SELECT
+    d.*,
+    c.id AS id_critere
+FROM v_data_reponse_candidat AS d
+JOIN critere AS c ON d.critere = LOWER(c.designation_critere);
+
+CREATE OR REPLACE VIEW v_reponse_candidat_a_penalite AS
+SELECT
+    r.*,
+    p.valeur_penalite AS penalite
+FROM v_reponse_candidat AS r
+LEFT JOIN parametrage_penalite_jour AS p 
+ON r.ecart_jour BETWEEN p.valeur_min AND p.valeur_max;
+
+CREATE OR REPLACE VIEW v_score_partiel_reponse AS
+SELECT
+    r.id_reponse,
+    r.id_candidat,
+    r.id_demande,
+    r.id_critere,
+    r.critere,
+    r.prix_propose,
+    r.ecart_jour,
+    (10 - (r.prix_propose / d.prix * 10)) AS score_partiel_prix,
+    (10 - (ABS(r.ecart_jour) * r.penalite)) AS score_partiel_disponibilite
+FROM v_reponse_candidat_a_penalite AS r
+JOIN demande_service AS d ON r.id_demande = d.id;
+
+CREATE OR REPLACE VIEW v_score_reponse AS
+SELECT
+    sp.id_reponse,
+    sp.id_candidat,
+    sp.id_demande,
+    sp.id_critere,
+    sp.critere,
+    sp.score_partiel_prix,
+    sp.score_partiel_disponibilite,
+    (sp.score_partiel_prix + n.bonus - n.malus) AS score_prix,
+    (sp.score_partiel_disponibilite + n.bonus - n.malus) AS score_disponibilite
+FROM v_score_partiel_reponse AS sp
+JOIN attribution_note_critere AS n
+ON (
+    sp.prix_propose >= n.min AND sp.prix_propose < n.max
+    OR 
+    sp.ecart_jour >= n.min AND sp.ecart_jour < n.max
+);

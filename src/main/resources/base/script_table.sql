@@ -79,3 +79,12 @@ CREATE TABLE IF NOT EXISTS attribution_poids_critere(
 );
 
 ALTER TABLE attribution_poids_critere ADD CONSTRAINT check_unique_demande_crite UNIQUE(id_demande_service, id_critere);
+
+---------------------------------- 01/05/2025 ------------------------------------------
+
+CREATE TABLE IF NOT EXISTS parametrage_penalite_jour(
+    id SERIAL PRIMARY KEY,
+    valeur_min INTEGER DEFAULT 0,
+    valeur_max INTEGER DEFAULT 0,
+    valeur_penalite INTEGER DEFAULT 0
+);
