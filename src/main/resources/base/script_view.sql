@@ -116,3 +116,57 @@ ON (
     OR 
     sp.ecart_jour >= n.min AND sp.ecart_jour < n.max
 );
+
+CREATE OR REPLACE VIEW v_note_reponse_critere AS
+SELECT
+    s.*,
+    p.poids,
+    ((s.score_prix * p.poids) / 100) AS note_prix,
+    ((s.score_disponibilite * p.poids) / 100) AS note_disponibilite
+FROM v_score_reponse AS s
+JOIN attribution_poids_critere AS p ON s.id_critere = p.id_critere;
+
+
+CREATE OR REPLACE VIEW v_note_finale_reponse_candidat AS
+SELECT
+    id_reponse,
+    id_demande,
+    id_candidat,
+    MAX(CASE WHEN critere = 'prix' THEN note_prix ELSE NULL END) AS note_prix,
+    MAX(CASE WHEN critere = 'disponibilité' THEN note_disponibilite ELSE NULL END) AS note_disponibilite,
+    (
+        COALESCE(MAX(CASE WHEN critere = 'prix' THEN note_prix ELSE NULL END), 0) + 
+        COALESCE(MAX(CASE WHEN critere = 'disponibilité' THEN note_disponibilite ELSE NULL END), 0)
+    ) AS note_finale
+FROM v_note_reponse_critere
+GROUP BY id_reponse, id_demande, id_candidat;
+
+
+CREATE OR REPLACE FUNCTION get_classement_demande(p_id_demande INT)
+RETURNS TABLE (
+    classement BIGINT,
+    id_reponse INT,
+    id_candidat INT,
+    candidat TEXT,
+    note_prix NUMERIC,
+    note_disponibilite NUMERIC,
+    note_finale NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY
+        SELECT 
+            RANK() OVER (ORDER BY v.note_finale DESC)::BIGINT AS classement,
+            v.id_reponse,
+            v.id_candidat,
+            u.nom_complet AS candidat,
+            v.note_prix,
+            v.note_disponibilite,
+            v.note_finale
+        FROM v_note_finale_reponse_candidat AS v
+        JOIN v_utilisateur AS u ON v.id_candidat = u.id
+        WHERE v.id_demande = p_id_demande
+        ORDER BY classement;
+END;
+$$;
