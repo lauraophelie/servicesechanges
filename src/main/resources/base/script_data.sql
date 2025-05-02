@@ -19,16 +19,25 @@ INSERT INTO critere(designation_critere) VALUES
     ('Prix'),
     ('Disponibilité');
 
-INSERT INTO attribution_note_critere(id_demande_service, id_critere, min, max, note, bonus, malus) VALUES
-    (1, 1, 100000, 150000, 6, 1, 0),
-    (1, 1, 150000, 175000, 5.5, 1, 0),
-    (1, 1, 175000, 200000, 8, 0, 0),
-    (1, 1, 200000, 250000, 7, 0, 0),
-    (1, 1, 250000, 300000, 6, 0, 0),
-    (1, 1, 300000, 350000, 5, 0, 2),
-    (1, 2, 0, 1, 10, 0, 0),
-    (1, 2, 1, 3, 6, 0, 0);
+INSERT INTO attribution_note_critere(id_demande_service, id_critere, min, max, bonus, malus) VALUES
+    (1, 1, 100000, 150000, 1, 0),
+    (1, 1, 150000, 175000, 1, 0),
+    (1, 1, 175000, 200000, 0, 0),
+    (1, 1, 200000, 250000, 0, 0),
+    (1, 1, 250000, 300000, 0, 0),
+    (1, 1, 300000, 350000, 0, 2),
+    (1, 2, -5, 1, 0, 0),
+    (1, 2, 1, 3, 0, 0);
 
 INSERT INTO attribution_poids_critere(id_demande_service, id_critere, poids) VALUES
     (1, 1, 40),
     (1, 2, 60);
+
+
+------------------------ 01/05/2025 ------------------------------
+
+INSERT INTO parametrage_penalite_jour(valeur_min, valeur_max, valeur_penalite) VALUES
+    (-3, -1, 2),
+    (-1, 1, 1),
+    (1, 3, 2),
+    (3, 6, 3);

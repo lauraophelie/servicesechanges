@@ -63,15 +63,6 @@ public class NoteCritere {
         this.max = max;
     }
 
-    @Column(name = "note")
-    private double note;
-    public double getNote() {
-        return note;
-    }
-    public void setNote(double note) {
-        this.note = note;
-    }
-
     @Column(name = "bonus")
     private double bonus;
     public double getBonus() {

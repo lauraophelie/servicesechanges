@@ -63,12 +63,13 @@ CREATE TABLE IF NOT EXISTS attribution_note_critere(
     id SERIAL PRIMARY KEY,
     id_demande_service INTEGER REFERENCES demande_service(id),
     id_critere INTEGER REFERENCES critere(id),
-    min DECIMAL CHECK (min >= 0),
-    max DECIMAL CHECK (max > 0),
-    note DECIMAL CHECK (note >= 0),
+    min DECIMAL,
+    max DECIMAL,
     bonus DECIMAL CHECK (bonus >= 0),
     malus DECIMAL CHECK (malus >= 0)
 );
+
+--ALTER TABLE attribution_note_critere DROP COLUMN note;
 
 CREATE TABLE IF NOT EXISTS attribution_poids_critere(
     id SERIAL PRIMARY KEY,
@@ -78,3 +79,12 @@ CREATE TABLE IF NOT EXISTS attribution_poids_critere(
 );
 
 ALTER TABLE attribution_poids_critere ADD CONSTRAINT check_unique_demande_crite UNIQUE(id_demande_service, id_critere);
+
+---------------------------------- 01/05/2025 ------------------------------------------
+
+CREATE TABLE IF NOT EXISTS parametrage_penalite_jour(
+    id SERIAL PRIMARY KEY,
+    valeur_min INTEGER DEFAULT 0,
+    valeur_max INTEGER DEFAULT 0,
+    valeur_penalite INTEGER DEFAULT 0
+);
