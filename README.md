@@ -1,5 +1,8 @@
 # Project Name
 
+## Translation 
+- [French](README.fr.md)
+
 ## Table of Contents
 
 1. [Description](#description)
@@ -42,6 +45,7 @@ To get started, clone this repository and install the necessary dependencies.
 ### Prerequisites
 - JDK 17
 - Maven 
+- PostgreSQL 16.4
 
 ### Steps
 1. Clone the repository:
