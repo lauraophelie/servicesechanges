@@ -1,8 +1,5 @@
 # Project Name
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) 
-[![Build Status](https://github.com/yourusername/yourproject/actions/workflows/ci.yml/badge.svg)](https://github.com/yourusername/yourproject/actions)
-
 ## Table of Contents
 
 1. [Description](#description)
