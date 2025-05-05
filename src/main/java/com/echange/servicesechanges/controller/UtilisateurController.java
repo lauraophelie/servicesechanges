@@ -1,5 +1,6 @@
 package com.echange.servicesechanges.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,13 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.echange.servicesechanges.auth.JwtUtils;
 import com.echange.servicesechanges.exception.ErrorResponse;
@@ -26,22 +26,24 @@ import com.echange.servicesechanges.repository.UtilisateurRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class UtilisateurController {
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
-    private UtilisateurRepository utilisateurRepository;
-
-    public UtilisateurController(AuthenticationManager authenticationManager, JwtUtils jwtUtils,
-            UtilisateurRepository utilisateurRepository) {
+    private final UtilisateurRepository utilisateurRepository;
+    public UtilisateurController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UtilisateurRepository utilisateurRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.utilisateurRepository = utilisateurRepository;
     }
 
-    @ResponseBody
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+
     @PostMapping(value = "/login")
     @SuppressWarnings("rawtypes")
     public ResponseEntity login(@RequestBody LoginUtilisateur loginUtilisateur) {
@@ -65,7 +67,6 @@ public class UtilisateurController {
     }
 
     @SuppressWarnings("rawtypes")
-    @ResponseBody
     @PostMapping(value = "/inscription")
     public ResponseEntity signup(@RequestBody Utilisateur utilisateur) {
         try {
@@ -83,7 +84,7 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
-    
+
     @GetMapping(value = "/logout")
     public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession();

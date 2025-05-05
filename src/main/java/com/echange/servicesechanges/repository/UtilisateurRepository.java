@@ -9,6 +9,6 @@ import com.echange.servicesechanges.model.utilisateur.Utilisateur;
 
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Integer> {
-    @Query("SELECT * FROM v_utilisateur WHERE contact = :contact")
+    @Query(value = "SELECT * FROM v_utilisateur WHERE contact = :contact", nativeQuery = true)
     public Utilisateur findByContact(@Param("contact") String contact);
 }
