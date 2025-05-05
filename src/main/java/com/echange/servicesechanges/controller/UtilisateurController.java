@@ -57,4 +57,24 @@ public class UtilisateurController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
+
+    @SuppressWarnings("rawtypes")
+    @ResponseBody
+    @PostMapping(value = "/inscription")
+    public ResponseEntity signup(@RequestBody Utilisateur utilisateur) {
+        try {
+            Utilisateur newUser = this.utilisateurRepository.save(utilisateur);
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(newUser.getContact(), newUser.getMotPasse());
+            Authentication authentication = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
+            String contact = authentication.getName();
+            String token = jwtUtils.createToken(newUser);
+            LoginReponse loginReponse = new LoginReponse(contact, token);
+
+            return ResponseEntity.ok(loginReponse);
+        } catch (Exception e) {
+            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+    }
 }
