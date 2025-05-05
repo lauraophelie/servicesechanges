@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.echange.servicesechanges.api.ApiReponse;
+import com.echange.servicesechanges.auth.JwtUtils;
 import com.echange.servicesechanges.model.publication.DemandeService;
 import com.echange.servicesechanges.model.publication.ParametrageService;
 import com.echange.servicesechanges.model.publication.PublicationDemande;
@@ -29,17 +30,20 @@ public class PublicationDemandeController {
     private ParametrageDemandeService parametrageDemandeService;
     private AttributionNoteService attributionNoteService;
     private AttributionPoidsService attributionPoidsService;
+    private JwtUtils jwtUtils;
 
     public PublicationDemandeController(
         PublicationDemandeService publicationDemandeService,
         ParametrageDemandeService parametrageDemandeService, 
         AttributionNoteService attributionNoteService,
-        AttributionPoidsService attributionPoidsService
+        AttributionPoidsService attributionPoidsService,
+        JwtUtils jwtUtils
     ) {
         this.publicationDemandeService = publicationDemandeService;
         this.parametrageDemandeService = parametrageDemandeService;
         this.attributionNoteService = attributionNoteService;
         this.attributionPoidsService = attributionPoidsService;
+        this.jwtUtils = jwtUtils;
     }
 
     public ResponseEntity<ApiReponse> publierDemande(@RequestBody PublicationDemande publicationDemande) {

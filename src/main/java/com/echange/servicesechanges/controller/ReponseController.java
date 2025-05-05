@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.echange.servicesechanges.api.ApiReponse;
+import com.echange.servicesechanges.auth.JwtUtils;
 import com.echange.servicesechanges.model.publication.ReponseService;
 import com.echange.servicesechanges.service.ReponseDemandeService;
 
@@ -17,9 +18,11 @@ import com.echange.servicesechanges.service.ReponseDemandeService;
 @CrossOrigin("*")
 public class ReponseController {
     private ReponseDemandeService service;
+    private JwtUtils jwtUtils;
 
-    public ReponseController(ReponseDemandeService service) {
+    public ReponseController(ReponseDemandeService service, JwtUtils jwtUtils) {
         this.service = service;
+        this.jwtUtils = jwtUtils;
     }
 
     @PostMapping
