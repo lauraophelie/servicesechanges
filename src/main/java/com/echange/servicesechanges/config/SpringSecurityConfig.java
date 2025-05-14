@@ -40,7 +40,7 @@ public class SpringSecurityConfig {
     @SuppressWarnings("deprecated")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests().requestMatchers("/rest/auth/**").permitAll().requestMatchers("/")
+        http.csrf().disable().authorizeRequests().requestMatchers("/api/auth/**").permitAll().requestMatchers("/")
                 .permitAll()
                 .anyRequest()
                 .authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()

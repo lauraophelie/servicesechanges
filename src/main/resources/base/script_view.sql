@@ -13,7 +13,8 @@ SELECT
     prenom,
     email,
     contact,
-    mot_passe
+    mot_passe,
+    date_naissance
 FROM utilisateur;
 
 -------------------------- 30/04/2025 ---------------------------

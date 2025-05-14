@@ -1,6 +1,5 @@
 package com.echange.servicesechanges.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -58,9 +57,13 @@ public class UtilisateurController {
 
             return ResponseEntity.ok(loginReponse);
         } catch (BadCredentialsException e) {
+            System.out.print(e.getMessage());
+            e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Contact ou mot de passe invalide");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } catch (Exception e) {
+            System.out.print(e.getMessage());
+            e.printStackTrace();
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
