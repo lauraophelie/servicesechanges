@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import com.echange.servicesechanges.auth.JwtUtils;
 import com.echange.servicesechanges.model.publication.DemandeService;
 import com.echange.servicesechanges.model.publication.ParametrageService;
 import com.echange.servicesechanges.model.publication.PublicationDemande;
+import com.echange.servicesechanges.model.utilisateur.Utilisateur;
 import com.echange.servicesechanges.service.AttributionNoteService;
 import com.echange.servicesechanges.service.AttributionPoidsService;
 import com.echange.servicesechanges.service.ParametrageDemandeService;
@@ -46,6 +49,7 @@ public class PublicationDemandeController {
         this.jwtUtils = jwtUtils;
     }
 
+    @GetMapping(value = "/publier")
     public ResponseEntity<ApiReponse> publierDemande(@RequestBody PublicationDemande publicationDemande) {
         try {
             DemandeService demande = this.publicationDemandeService.save(publicationDemande.getDemandeService());
@@ -54,6 +58,35 @@ public class PublicationDemandeController {
             List<PoidsCritere> listePoids = this.attributionPoidsService.saveAll(demande.getId(), publicationDemande.getListePoidsCriteres());
 
             ApiReponse api = new ApiReponse(null, demande);
+            return ResponseEntity.ok(api);
+        } catch (Exception e) {
+            ApiReponse reponse = new ApiReponse(e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(reponse);
+        }
+    }
+
+    @GetMapping(value = "/u/{idUtilisateur}")
+    public ResponseEntity<ApiReponse> getDemandesUtilisateur(@PathVariable int idUtilisateur) {
+        try {
+            Utilisateur utilisateur = new Utilisateur();
+            utilisateur.setId(idUtilisateur);
+
+            List<DemandeService> demandes = this.publicationDemandeService.findByUtilisateur(utilisateur);
+            ApiReponse api = new ApiReponse(null, demandes);
+
+            return ResponseEntity.ok(api);
+        } catch (Exception e) {
+            ApiReponse reponse = new ApiReponse(e.getMessage(), null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(reponse);
+        }
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<ApiReponse> getAllPublications() {
+        try {
+            List<DemandeService> publications = this.publicationDemandeService.findAll();
+            ApiReponse api = new ApiReponse(null, publications);
+
             return ResponseEntity.ok(api);
         } catch (Exception e) {
             ApiReponse reponse = new ApiReponse(e.getMessage(), null);
