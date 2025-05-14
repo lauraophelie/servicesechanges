@@ -1,0 +1,17 @@
+openapi: '3.0.3'
+info:
+  title: Echange de services
+  version: '1.0'
+servers:
+  - url: https://localhost:8080/api
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+  /auth/login:
+    get:
+      responses:
+      '200':
+        description: OK
