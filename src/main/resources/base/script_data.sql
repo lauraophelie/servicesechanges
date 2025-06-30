@@ -41,3 +41,34 @@ INSERT INTO parametrage_penalite_jour(valeur_min, valeur_max, valeur_penalite) V
     (-1, 1, 1),
     (1, 3, 2),
     (3, 6, 3);
+
+--------------------------- 30/06/2025 -----------------------------------
+
+INSERT INTO demande_service(intitule_service, description_service, date_besoin_service, prix, id_utilisateur) VALUES
+    ('Besoin de nettoyage', 'Nettoyage de plusieurs voiture', '2025-07-04', 250000, 1);
+
+
+INSERT INTO reponse_service(prix_propose, date_disponibilite, id_utilisateur, id_demande_service) VALUES
+    (175000, '2025-07-01', 2, 2),
+    (300000, '2025-07-02', 3, 2);
+
+INSERT INTO parametrage_demande_service(id_demande_service, date_limite_reponse, marge_disponibilite, min_prix_propose, max_prix_propose) VALUES
+    (2, '2025-07-02', 2, 250000, 350000);
+
+INSERT INTO critere(designation_critere) VALUES
+    ('Prix'),
+    ('Disponibilité');
+
+INSERT INTO attribution_note_critere(id_demande_service, id_critere, min, max, bonus, malus) VALUES
+    (2, 1, 100000, 150000, 1, 0),
+    (2, 1, 150000, 175000, 1, 0),
+    (2, 1, 175000, 200000, 0, 0),
+    (2, 1, 200000, 250000, 0, 0),
+    (2, 1, 250000, 300000, 0, 0),
+    (2, 1, 300000, 350000, 0, 2),
+    (2, 2, -5, 1, 0, 0),
+    (2, 2, 1, 3, 0, 0);
+
+INSERT INTO attribution_poids_critere(id_demande_service, id_critere, poids) VALUES
+    (2, 1, 40),
+    (2, 2, 60);

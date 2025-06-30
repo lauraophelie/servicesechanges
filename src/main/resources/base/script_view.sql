@@ -163,8 +163,8 @@ BEGIN
             v.id_candidat,
             u.nom_complet AS candidat,
             v.note_prix,
-            v.note_disponibilite,
-            v.note_finale
+            v.note_disponibilite::NUMERIC,
+            v.note_finale::NUMERIC
         FROM v_note_finale_reponse_candidat AS v
         JOIN v_utilisateur AS u ON v.id_candidat = u.id
         WHERE v.id_demande = p_id_demande
