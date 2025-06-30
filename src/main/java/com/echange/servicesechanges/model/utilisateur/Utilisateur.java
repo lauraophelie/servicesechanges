@@ -93,4 +93,9 @@ public class Utilisateur {
     public void setMotPasse(String motPasse) {
         this.motPasse = motPasse;
     }
+    @Override
+    public String toString() {
+        return "Utilisateur [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", dateNaissance=" + dateNaissance
+                + ", genre=" + genre + ", email=" + email + ", contact=" + contact + ", motPasse=" + motPasse + "]";
+    }
 }
